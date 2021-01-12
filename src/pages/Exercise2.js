@@ -8,13 +8,24 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // 
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
 // https://material-ui.com/components/slider/
-const Exercise1 = () => {
+const Exercise2 = ({ mode }) => {
   const [value, setValue] = useState([1, 1000]);
+  const [maxValue, setMaxValue] = useState(0);
+  const [minValue, setMinValue] = useState(0);
   const [step] = useState(1);
 
   useEffect(() => {
+    fetch("http://demo8878015.mockable.io/mangoExercise2")
+      .then((res) => res.json())
+      .then((result) => {
+        const { range } = result;
+        setValue(range);
+        setMinValue(range[0]);
+        setMaxValue(range[1]);
+      });
+
     return () => {};
-  }, [value]);
+  }, []);
 
   const useStyles = makeStyles({
     typography: {
@@ -99,7 +110,7 @@ const Exercise1 = () => {
         variant="h4"
         gutterBottom
       >
-        Fixed Values Range
+        {mode && mode.toUpperCase()} RANGE
       </Typography>
 
       <MuiThemeProvider theme={theme}>
@@ -134,8 +145,12 @@ const Exercise1 = () => {
   );
 };
 
-Exercise1.defaultProps = {};
+Exercise2.defaultProps = {
+  mode: "",
+};
 
-Exercise1.propTypes = {};
+Exercise2.propTypes = {
+  mode: PropTypes.string,
+};
 
-export default memo(Exercise1);
+export default memo(Exercise2);

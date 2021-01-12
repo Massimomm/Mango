@@ -8,7 +8,7 @@ import Input from "@material-ui/core/Input";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // v1.x
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
-const Exercise1 = () => {
+const Exercise1 = ({ mode }) => {
   const [value, setValue] = useState([]);
   const [maxValue, setMaxValue] = useState(0);
   const [minValue, setMinValue] = useState(0);
@@ -152,7 +152,7 @@ const Exercise1 = () => {
         variant="h4"
         gutterBottom
       >
-        Normal Range
+        {mode && mode.toUpperCase()} RANGE
       </Typography>
       <Grid container spacing={2} alignItems="center">
         <Grid item>
@@ -222,8 +222,12 @@ const Exercise1 = () => {
   );
 };
 
-Exercise1.defaultProps = {};
+Exercise1.defaultProps = {
+  mode: "",
+};
 
-Exercise1.propTypes = {};
+Exercise1.propTypes = {
+  mode: PropTypes.string,
+};
 
 export default memo(Exercise1);
