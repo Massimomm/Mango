@@ -3,19 +3,15 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
-
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // v1.x
-
-import purple from "@material-ui/core/colors/purple";
-import green from "@material-ui/core/colors/green";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 
 // https://material-ui.com/components/slider/
 const Exercise1 = () => {
   const [value, setValue] = useState([1, 1000]);
-  const [step, setStep] = useState(1);
+  const [step] = useState(1);
 
   useEffect(() => {
-    // if (value[0] > value[1]) setValue([value[0] - 10, value[1] + 10]);
     return () => {};
   }, [value]);
 
@@ -30,13 +26,37 @@ const Exercise1 = () => {
       marginLeft: 550,
       width: 500,
     },
+    dangerText: {
+      width: 500,
+      color: "red",
+    },
   });
 
   const theme = createMuiTheme({
     overrides: {
       MuiSlider: {
-        track: { backgroundColor: "green" },
-        thumb: { backgroundColor: "black" },
+        track: { backgroundColor: "green", height: 6 },
+        thumb: {
+          height: 18,
+          width: 18,
+          backgroundColor: "#fff",
+          border: "2px solid #de235b",
+          "&$focused, &:hover": {
+            boxShadow: `0px 0px 0px ${8}px ${fade("#de235b", 0.16)}`,
+          },
+          "&$activated": {
+            boxShadow: `0px 0px 0px ${8 * 1.5}px ${fade("#de235b", 0.16)}`,
+          },
+          "&$jumped": {
+            boxShadow: `0px 0px 0px ${8 * 4.5}px ${fade("#de235b", 0.16)}`,
+          },
+        },
+        trackAfter: {
+          backgroundColor: "#d0d7dc",
+        },
+        focused: {},
+        activated: {},
+        jumped: {},
       },
     },
   });
@@ -56,21 +76,16 @@ const Exercise1 = () => {
     return `${value} €`;
   }
 
-  // console.log("Exercise 1");
-
   const handleChange = (event, newValue) => {
-    console.log(
-      "handleChange",
-      value,
-      newValue,
-      "min",
-      newValue[0],
-      "max",
-      newValue[1]
-    );
-    if (newValue[0] > newValue[1])
-      setValue([newValue[0] - 10, newValue[1] + 10]);
-    else setValue(newValue);
+    // console.log("handleChange", event, "min", newValue[0], "max", newValue[1]);
+    // https://github.com/mui-org/material-ui/issues/17228
+    if (newValue && newValue.length) {
+      if (newValue[1] - newValue[0] <= 50) {
+        newValue[0] = newValue[0] - 50; // restrict the range to be 50
+        newValue[1] = newValue[1] + 50; // restrict the range to be 50
+        setValue(newValue);
+      } else setValue(newValue);
+    }
   };
 
   const classes = useStyles();
@@ -84,9 +99,10 @@ const Exercise1 = () => {
       >
         Normal range
       </Typography>
+
       <MuiThemeProvider theme={theme}>
         <Slider
-          track={true}
+          track={"normal"}
           value={value}
           onChange={handleChange}
           valueLabelDisplay="on"
@@ -99,6 +115,19 @@ const Exercise1 = () => {
           max={1000}
         />
       </MuiThemeProvider>
+
+      {
+        <Typography className={classes.typography}>
+          Selected Price Range {value[1] - value[0]} €
+        </Typography>
+      }
+
+      {value[1] - value[0] < 70 && (
+        <Typography className={classes.dangerText}>
+          The Price Range is low, Remember that Min value and Max value can't be
+          crossed {value[0]} € - {value[1]} €
+        </Typography>
+      )}
     </div>
   );
 };
