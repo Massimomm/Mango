@@ -1,4 +1,3 @@
-// https://www.w3.org/TR/wai-aria-practices/examples/slider/multithumb-slider.html
 import React, { useState, useEffect, memo } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,7 +20,6 @@ const Exercise2 = ({ mode }) => {
         setLastValue(result[1]);
       }
     );
-
     return () => {};
   }, []);
 
@@ -45,32 +43,6 @@ const Exercise2 = ({ mode }) => {
           }
         }
       );
-
-    // fetch("http://demo8878015.mockable.io/mangoExercise2")
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     const { range } = result;
-
-    //     // setFirstValue([...range].shift());
-    //     // setLastValue(range.slice(-1).pop());
-
-    //     if (range) {
-    //       setValue(range);
-
-    //       range.unshift(firstValue);
-    //       range.push(lastValue);
-
-    //       setMarks(
-    //         range.map((v) => {
-    //           return {
-    //             value: v,
-    //             label: v === 0 ? `${v}` : `${v} €`,
-    //           };
-    //         })
-    //       );
-    //     }
-    //     // console.log("first", [...range].shift(), range.slice(-1).pop());
-    //   });
     return () => {};
   }, [firstValue, lastValue]);
 
