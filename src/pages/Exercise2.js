@@ -46,8 +46,17 @@ const Exercise2 = ({ mode }) => {
       width: 1200,
     },
     dangerText: {
+      marginTop: 10,
       width: 1200,
       color: "red",
+    },
+    statusBar: {
+      marginTop: 20,
+      width: 1200,
+      color: "#304ffe",
+    },
+    labelDisplay: {
+      fontSize: 9,
     },
   });
 
@@ -85,7 +94,11 @@ const Exercise2 = ({ mode }) => {
   }
 
   function valueLabelFormat(val) {
-    return marks ? marks.find((mark) => mark.value === val).label : null;
+    return marks ? (
+      <div className={classes.labelDisplay}>
+        {marks.find((mark) => mark.value === val).label}
+      </div>
+    ) : null;
   }
 
   const handleChange = (event, newValue) => {
@@ -120,7 +133,7 @@ const Exercise2 = ({ mode }) => {
         />
       </MuiThemeProvider>
       {
-        <Typography className={classes.typography}>
+        <Typography className={classes.statusBar}>
           Selected Price Range {(value[1] - value[0]).toFixed(2)} €
         </Typography>
       }
