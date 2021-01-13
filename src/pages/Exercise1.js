@@ -80,6 +80,7 @@ const Exercise1 = ({ mode }) => {
   function valuetext(value) {
     return `${value} €`;
   }
+
   const handleInputChange = (event) => {
     const {
       target: { value: val, id },
@@ -222,12 +223,8 @@ const Exercise1 = ({ mode }) => {
   );
 };
 
-Exercise1.defaultProps = {
-  mode: "",
-};
-
 Exercise1.propTypes = {
-  mode: PropTypes.string,
+  mode: PropTypes.string.isRequired,
 };
 
 export default memo(Exercise1);

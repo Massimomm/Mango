@@ -7,21 +7,28 @@ import Slider from "@material-ui/core/Slider";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // v1.x
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
-// https://material-ui.com/components/slider/
 const Exercise2 = ({ mode }) => {
-  const [value, setValue] = useState([1, 1000]);
-  const [maxValue, setMaxValue] = useState(0);
-  const [minValue, setMinValue] = useState(0);
-  const [step] = useState(1);
+  const [value, setValue] = useState([]);
+  const [firstValue, setFirstValue] = useState(0);
+  const [lastValue, setLastValue] = useState(0);
+  const [marks, setMarks] = useState(null);
 
   useEffect(() => {
     fetch("http://demo8878015.mockable.io/mangoExercise2")
       .then((res) => res.json())
       .then((result) => {
         const { range } = result;
+
         setValue(range);
-        setMinValue(range[0]);
-        setMaxValue(range[1]);
+        setFirstValue([...range].shift());
+        setLastValue(range.slice(-1).pop());
+
+        setMarks(
+          range.map((v) => {
+            return { value: v, label: `${v} €` };
+          })
+        );
+        // console.log("first", [...range].shift(), range.slice(-1).pop());
       });
 
     return () => {};
@@ -30,16 +37,16 @@ const Exercise2 = ({ mode }) => {
   const useStyles = makeStyles({
     typography: {
       marginBottom: 50,
-      width: 500,
+      width: 1200,
       color: "#304ffe",
     },
     root: {
       marginTop: 100,
-      marginLeft: 550,
-      width: 500,
+      marginLeft: 200,
+      width: 1200,
     },
     dangerText: {
-      width: 500,
+      width: 1200,
       color: "red",
     },
   });
@@ -49,8 +56,8 @@ const Exercise2 = ({ mode }) => {
       MuiSlider: {
         track: { backgroundColor: "green", height: 6 },
         thumb: {
-          height: value[1] - value[0] > 50 ? 18 : 28,
-          width: value[1] - value[0] > 50 ? 18 : 28,
+          height: 24,
+          width: 24,
           backgroundColor: "#fff",
           border: "2px solid #de235b",
           "&$focused, &:hover": {
@@ -73,84 +80,62 @@ const Exercise2 = ({ mode }) => {
     },
   });
 
-  const marks = [
-    {
-      value: 1,
-      label: "1 €",
-    },
-    {
-      value: 1000,
-      label: "1000 €",
-    },
-  ];
+  function valuetext(val) {
+    return `${val}€`;
+  }
 
-  function valuetext(value) {
-    return `${value} €`;
+  function valueLabelFormat(val) {
+    return marks ? marks.find((mark) => mark.value === val).label : null;
   }
 
   const handleChange = (event, newValue) => {
-    // console.log("handleChange", event, "min", newValue[0], "max", newValue[1]);
-    // https://github.com/mui-org/material-ui/issues/17228
-    // if (newValue && newValue.length) {
-    //   if (newValue[1] - newValue[0] <= 50) {
-    //     newValue[0] = newValue[0] - 50; // restrict the range to be 50
-    //     newValue[1] = newValue[1] + 50; // restrict the range to be 50
-    //     setValue(newValue);
-    //   } else setValue(newValue);
-    // }
     setValue(newValue);
   };
 
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <Typography
         className={classes.typography}
-        id="range-slider"
+        id="discrete-slider-restrict"
         variant="h4"
         gutterBottom
       >
         {mode && mode.toUpperCase()} RANGE
       </Typography>
-
       <MuiThemeProvider theme={theme}>
         <Slider
-          track={"normal"}
-          value={value}
+          value={[[...value].shift(), value.slice(-1).pop()]}
           onChange={handleChange}
-          valueLabelDisplay="on"
-          aria-labelledby="range-slider"
+          defaultValue={firstValue}
+          valueLabelFormat={valueLabelFormat}
           getAriaValueText={valuetext}
-          defaultValue={1}
+          aria-labelledby="discrete-slider-restrict"
+          valueLabelDisplay="auto"
+          step={null}
           marks={marks}
-          step={step}
-          min={1}
-          max={1000}
+          min={firstValue}
+          max={lastValue}
         />
       </MuiThemeProvider>
-
       {
         <Typography className={classes.typography}>
-          Selected Price Range {value[1] - value[0]} €
+          Selected Price Range {(value[1] - value[0]).toFixed(2)} €
         </Typography>
       }
-
-      {value[1] - value[0] < 70 && (
+      {value[0] === value[1] && (
         <Typography className={classes.dangerText}>
-          The Price Range is low, Remember that Min value and Max value can't be
-          crossed {value[0]} € - {value[1]} €
+          This Price Range Selected {(value[1] - value[0]).toFixed(2)} is NOT
+          allowed!
         </Typography>
       )}
     </div>
   );
 };
 
-Exercise2.defaultProps = {
-  mode: "",
-};
-
 Exercise2.propTypes = {
-  mode: PropTypes.string,
+  mode: PropTypes.string.isRequired,
 };
 
 export default memo(Exercise2);
