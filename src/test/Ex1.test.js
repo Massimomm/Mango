@@ -10,7 +10,7 @@ describe("Fizz Buzz", () => {
     assert.equal(125, 125);
   });
 
-  console.log(process.argv, process.argv[2]);
+  // console.log(process.argv, process.argv[2]);
 });
 
 render(<div />);

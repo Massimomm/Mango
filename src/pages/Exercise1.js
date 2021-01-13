@@ -7,6 +7,7 @@ import Slider from "@material-ui/core/Slider";
 import Input from "@material-ui/core/Input";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // v1.x
 import { fade } from "@material-ui/core/styles/colorManipulator";
+import { request } from "../utils/api";
 
 const Exercise1 = ({ mode }) => {
   const [value, setValue] = useState([]);
@@ -15,14 +16,11 @@ const Exercise1 = ({ mode }) => {
   const [step] = useState(1);
 
   useEffect(() => {
-    fetch("https://demo8878015.mockable.io/mangoExercise1")
-      .then((res) => res.json())
-      .then((result) => {
-        const { range } = result;
-        setValue(range);
-        setMinValue(range[0]);
-        setMaxValue(range[1]);
-      });
+    request("https://demo8878015.mockable.io/mangoExercise1").then((result) => {
+      setValue(result);
+      setMinValue(result[0]);
+      setMaxValue(result[1]);
+    });
 
     return () => {};
   }, []);
@@ -118,7 +116,6 @@ const Exercise1 = ({ mode }) => {
 
   const classes = useStyles();
 
-  console.log("Nan", maxValue, minValue, maxValue - minValue);
   return (
     <div className={classes.root}>
       <Typography

@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import App from "./App";
-import Exercise1 from "./pages/Exercise1";
-import Exercise2 from "./pages/Exercise2";
+import App from "../App";
+import Exercise1 from "../pages/Exercise1";
 
 test("1 - renders Range Controls text", () => {
   render(<App />);
@@ -9,7 +8,7 @@ test("1 - renders Range Controls text", () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-test("2 - renders FIXED RANGE text", () => {
+test("2 - renders Normal RANGE text", () => {
   render(<Exercise1 mode={"normal"} />);
   const linkElement = screen.getByText(/NORMAL RANGE/i);
   expect(linkElement).toBeInTheDocument();

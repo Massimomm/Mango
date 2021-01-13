@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // v1.x
 import { fade } from "@material-ui/core/styles/colorManipulator";
+import { request } from "../utils/api";
 
 const Exercise2 = ({ mode }) => {
   const [value, setValue] = useState([]);
@@ -14,42 +15,62 @@ const Exercise2 = ({ mode }) => {
   const [marks, setMarks] = useState(null);
 
   useEffect(() => {
-    fetch("https://demo8878015.mockable.io/mangoRangeValues")
-      .then((res) => res.json())
-      .then((result) => {
-        const { range } = result;
-
-        setFirstValue(range[0]);
-        setLastValue(range[1]);
-      });
+    request("https://demo8878015.mockable.io/mangoRangeValues").then(
+      (result) => {
+        setFirstValue(result[0]);
+        setLastValue(result[1]);
+      }
+    );
 
     return () => {};
   }, []);
 
   useEffect(() => {
-    fetch("http://demo8878015.mockable.io/mangoExercise2")
-      .then((res) => res.json())
-      .then((result) => {
-        const { range } = result;
+    if (firstValue !== lastValue)
+      request("http://demo8878015.mockable.io/mangoExercise2").then(
+        (result) => {
+          if (result) {
+            setValue(result);
+            result.unshift(firstValue);
+            result.push(lastValue);
 
-        // setFirstValue([...range].shift());
-        // setLastValue(range.slice(-1).pop());
+            setMarks(
+              result.map((v) => {
+                return {
+                  value: v,
+                  label: v === 0 ? `${v}` : `${v} €`,
+                };
+              })
+            );
+          }
+        }
+      );
 
-        setValue(range);
+    // fetch("http://demo8878015.mockable.io/mangoExercise2")
+    //   .then((res) => res.json())
+    //   .then((result) => {
+    //     const { range } = result;
 
-        range.unshift(firstValue);
-        range.push(lastValue);
+    //     // setFirstValue([...range].shift());
+    //     // setLastValue(range.slice(-1).pop());
 
-        setMarks(
-          range.map((v) => {
-            return {
-              value: v,
-              label: v === 0 ? `${v}` : `${v} €`,
-            };
-          })
-        );
-        // console.log("first", [...range].shift(), range.slice(-1).pop());
-      });
+    //     if (range) {
+    //       setValue(range);
+
+    //       range.unshift(firstValue);
+    //       range.push(lastValue);
+
+    //       setMarks(
+    //         range.map((v) => {
+    //           return {
+    //             value: v,
+    //             label: v === 0 ? `${v}` : `${v} €`,
+    //           };
+    //         })
+    //       );
+    //     }
+    //     // console.log("first", [...range].shift(), range.slice(-1).pop());
+    //   });
     return () => {};
   }, [firstValue, lastValue]);
 
