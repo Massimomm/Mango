@@ -94,22 +94,14 @@ const Exercise1 = ({ mode }) => {
         range[0] = min;
         range[1] = maxValue ?? value[1];
         setMinValue(+val);
-        // setMinValue(
-        //   +val > 0 && +val <= 1000
-        //     ? +val <= value[1]
-        //       ? +val
-        //       : value[0]
-        //     : undefined
-        // );
+
         break;
       case "maxValue":
         const max = val ? (+val >= value[0] ? +val : undefined) : undefined;
         range[0] = minValue ?? value[0];
         range[1] = max;
         setMaxValue(+val);
-        // setMaxValue(
-        //   +val > 0 && +val <= 1000 && +val >= value[0] ? +val : undefined
-        // );
+
         break;
       default:
         break;
@@ -118,32 +110,15 @@ const Exercise1 = ({ mode }) => {
     setValue(range);
   };
 
-  const handleBlur = () => {
-    console.log("handleBlur", value);
-
-    // if (value < 0) {
-    //   setValue(0);
-    // } else if (value > 100) {
-    //   setValue(100);
-    // }
-  };
-
   const handleChange = (event, newValue) => {
-    // console.log("handleChange", event, "min", newValue[0], "max", newValue[1]);
-    // https://github.com/mui-org/material-ui/issues/17228
-    // if (newValue && newValue.length) {
-    //   if (newValue[1] - newValue[0] <= 50) {
-    //     newValue[0] = newValue[0] - 50; // restrict the range to be 50
-    //     newValue[1] = newValue[1] + 50; // restrict the range to be 50
-    //     setValue(newValue);
-    //   } else setValue(newValue);
-    // }
     setMinValue(newValue[0]);
     setMaxValue(newValue[1]);
     setValue(newValue);
   };
 
   const classes = useStyles();
+
+  console.log("Nan", maxValue, minValue, maxValue - minValue);
   return (
     <div className={classes.root}>
       <Typography
@@ -162,7 +137,6 @@ const Exercise1 = ({ mode }) => {
             value={minValue}
             margin="dense"
             onChange={(event) => handleInputChange(event)}
-            onBlur={handleBlur}
             inputProps={{
               step: { step },
               min: 1,
@@ -195,7 +169,6 @@ const Exercise1 = ({ mode }) => {
             value={maxValue}
             margin="dense"
             onChange={(event) => handleInputChange(event)}
-            onBlur={handleBlur}
             inputProps={{
               step: { step },
               min: 1,
@@ -212,7 +185,7 @@ const Exercise1 = ({ mode }) => {
         </Typography>
       }
 
-      {maxValue < minValue && (
+      {maxValue - minValue < 0 && (
         <Typography className={classes.dangerText}>
           The Price Range Selected is NOT allowed! Min and Max value can't be
           crossed

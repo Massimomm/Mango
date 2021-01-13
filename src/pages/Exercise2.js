@@ -14,45 +14,64 @@ const Exercise2 = ({ mode }) => {
   const [marks, setMarks] = useState(null);
 
   useEffect(() => {
-    fetch("http://demo8878015.mockable.io/mangoExercise2")
+    fetch("https://demo8878015.mockable.io/mangoRangeValues")
       .then((res) => res.json())
       .then((result) => {
         const { range } = result;
 
-        setValue(range);
-        setFirstValue([...range].shift());
-        setLastValue(range.slice(-1).pop());
-
-        setMarks(
-          range.map((v) => {
-            return { value: v, label: `${v} €` };
-          })
-        );
-        // console.log("first", [...range].shift(), range.slice(-1).pop());
+        setFirstValue(range[0]);
+        setLastValue(range[1]);
       });
 
     return () => {};
   }, []);
 
+  useEffect(() => {
+    fetch("http://demo8878015.mockable.io/mangoExercise2")
+      .then((res) => res.json())
+      .then((result) => {
+        const { range } = result;
+
+        // setFirstValue([...range].shift());
+        // setLastValue(range.slice(-1).pop());
+
+        setValue(range);
+
+        range.unshift(firstValue);
+        range.push(lastValue);
+
+        setMarks(
+          range.map((v) => {
+            return {
+              value: v,
+              label: v === 0 ? `${v}` : `${v} €`,
+            };
+          })
+        );
+        // console.log("first", [...range].shift(), range.slice(-1).pop());
+      });
+    return () => {};
+  }, [firstValue, lastValue]);
+
   const useStyles = makeStyles({
     typography: {
       marginBottom: 50,
-      width: 1200,
+      width: 1300,
       color: "#304ffe",
     },
     root: {
       marginTop: 100,
       marginLeft: 200,
-      width: 1200,
+      width: 1300,
     },
     dangerText: {
       marginTop: 10,
-      width: 1200,
+      width: 1300,
       color: "red",
     },
     statusBar: {
       marginTop: 20,
-      width: 1200,
+      width: 1300,
       color: "#304ffe",
     },
     labelDisplay: {
@@ -139,7 +158,7 @@ const Exercise2 = ({ mode }) => {
       }
       {value[0] === value[1] && (
         <Typography className={classes.dangerText}>
-          This Price Range Selected {(value[1] - value[0]).toFixed(2)} is NOT
+          This Price Range selected: {(value[1] - value[0]).toFixed(2)}, is NOT
           allowed!
         </Typography>
       )}
