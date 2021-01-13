@@ -53,8 +53,8 @@ const Exercise1 = ({ mode }) => {
       MuiSlider: {
         track: { backgroundColor: "green", height: 6 },
         thumb: {
-          height: value[1] === value[0] ? 28 : 18,
-          width: value[1] === value[0] ? 28 : 18,
+          height: value[1] === value[0] ? 38 : 18,
+          width: value[1] === value[0] ? 38 : 18,
           backgroundColor: "#fff",
           border: "2px solid #de235b",
           "&$focused, &:hover": {
@@ -85,9 +85,8 @@ const Exercise1 = ({ mode }) => {
     const {
       target: { value: val, id },
     } = event;
-    console.log("handleInputChange", id, value, val);
 
-    let range = new Array();
+    let range = [];
 
     switch (id) {
       case "minValue":

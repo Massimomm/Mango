@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import PropTypes from "prop-types";
 import Exercise1 from "./Exercise1";
 import Exercise2 from "./Exercise2";
 
@@ -16,6 +17,10 @@ const Range = ({ match }) => {
       )}
     </>
   );
+};
+
+Range.propTypes = {
+  match: PropTypes.string.isRequired,
 };
 
 export default memo(Range);
