@@ -6,6 +6,7 @@ import Slider from "@material-ui/core/Slider";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // v1.x
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import { request } from "../utils/api";
+import { generateText } from "../utils/utils";
 
 const Exercise2 = ({ mode }) => {
   const [value, setValue] = useState([]);
@@ -144,15 +145,20 @@ const Exercise2 = ({ mode }) => {
           max={lastValue}
         />
       </MuiThemeProvider>
-      {
+      {value.length === 2 && (
         <Typography className={classes.statusBar}>
-          Selected Price Range {(value[1] - value[0]).toFixed(2)} €
+          {generateText(
+            "Price Range Selected",
+            (value[1] - value[0]).toFixed(2)
+          )}
         </Typography>
-      }
+      )}
       {value[0] === value[1] && (
         <Typography className={classes.dangerText}>
-          This Price Range selected: {(value[1] - value[0]).toFixed(2)}, is NOT
-          allowed!
+          {generateText(
+            "Price Range not Valid:",
+            (value[1] - value[0]).toFixed(2)
+          )}
         </Typography>
       )}
     </div>

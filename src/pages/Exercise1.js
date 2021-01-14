@@ -8,6 +8,7 @@ import Input from "@material-ui/core/Input";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"; // v1.x
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import { request } from "../utils/api";
+import { generateText } from "../utils/utils";
 
 const Exercise1 = ({ mode }) => {
   const [value, setValue] = useState([]);
@@ -178,15 +179,19 @@ const Exercise1 = ({ mode }) => {
       </Grid>
       {
         <Typography className={classes.typography}>
-          Range Price {value[1] - value[0]} €
+          {generateText("Price Range Selected:", value[1] - value[0])}
         </Typography>
       }
 
       {maxValue - minValue < 0 && (
-        <Typography className={classes.dangerText}>
-          The Price Range Selected is NOT allowed! Min and Max value can't be
-          crossed
-        </Typography>
+        <div>
+          <Typography className={classes.dangerText}>
+            {generateText("The Price Range Selected is NOT valid!")}
+          </Typography>
+          <Typography className={classes.dangerText}>
+            {generateText("Min and Max value can't be CROSSED")}
+          </Typography>
+        </div>
       )}
     </div>
   );

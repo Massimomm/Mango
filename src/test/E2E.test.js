@@ -14,6 +14,12 @@ test("2 - renders Normal RANGE text", () => {
   expect(linkElement).toBeInTheDocument();
 });
 
+test("3 - renders Fixed RANGE text", () => {
+  render(<Exercise1 mode={"fixed"} />);
+  const linkElement = screen.getByText(/FIXED RANGE/i);
+  expect(linkElement).toBeInTheDocument();
+});
+
 // test("renders a message", () => {
 //   const { container, getByText } = render(<Exercise2 mode={"fixed"} />);
 //   expect(screen.getByText("fixed")).toBeInTheDocument();

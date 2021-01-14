@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Router>
         <header className="App-header">
-          <h2 className="App-link">Mango Range Controls</h2>
+          <h2 className="App-link">Range Controls</h2>
 
           <div style={{ display: "flex", flexDirection: "row" }}>
             <div>

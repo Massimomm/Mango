@@ -1,5 +1,4 @@
 export const request = (url) => {
-  console.log("Fetching Data..");
   const result = new Promise((resolve, reject) => {
     fetch(url)
       .then((res) => res.json())
